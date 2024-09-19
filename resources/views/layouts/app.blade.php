@@ -76,5 +76,9 @@
             @yield('content')
         </main>
     </div>
+    <script>
+        console.log("<?php echo Auth::user(); ?>")
+    </script>
+    
 </body>
 </html>
