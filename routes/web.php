@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-// Route::get('/{vue_capture?}', function () {
+// Route::get('/', function () {
 //     return view('master');
-// }) -> where('vue_capture', '[\/\w\.-]*');
+// });
+
+Route::get('/{vue_capture?}', function () {
+    return view('master');
+}) -> where('vue_capture', '[\/\w\.-]*');
 
 // Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
