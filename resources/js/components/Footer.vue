@@ -1,18 +1,13 @@
 <template>
-    <!--begin::Footer-->
-    <footer className="app-footer">
-        <!--begin::To the end-->
-        <div className="float-end d-none d-sm-inline">Anything you want</div>
-        <!--end::To the end-->
-        <!--begin::Copyright-->
-        <strong>
-            Copyright &copy; 2014-2024&nbsp;
-            <a href="https://adminlte.io" className="text-decoration-none"
-                >AdminLTE.io</a
-            >.
-        </strong>
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="float-right d-none d-sm-inline">Anything you want</div>
+        <!-- Default to the left -->
+        <strong
+            >Copyright &copy; 2014-2021
+            <a href="https://adminlte.io">AdminLTE.io</a>.</strong
+        >
         All rights reserved.
-        <!--end::Copyright-->
     </footer>
-    <!--end::Footer-->
 </template>

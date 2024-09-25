@@ -1,68 +1,68 @@
 <template>
-    <div className="register-page">
-        <div className="register-box">
-            <div className="register-logo">
+    <div class="register-page">
+        <div class="register-box">
+            <div class="register-logo">
                 <router-link to="/"><b>Car</b>Sales</router-link>
             </div>
-            <div className="card">
-                <div className="card-body register-card-body">
-                    <p className="login-box-msg">Create account</p>
+            <div class="card">
+                <div class="card-body register-card-body">
+                    <p class="login-box-msg">Create account</p>
                     <form @submit.prevent="register" method="post">
-                        <div className="input-group mb-3">
+                        <div class="input-group mb-3">
                             <input
                                 type="text"
-                                className="form-control"
+                                class="form-control"
                                 placeholder="Full name"
                                 v-model="name"
                             />
-                            <div className="input-group-append">
-                                <div className="input-group-text">
-                                    <span className="fa fa-user"></span>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fa fa-user"></span>
                                 </div>
                             </div>
                         </div>
-                        <div className="input-group mb-3">
+                        <div class="input-group mb-3">
                             <input
                                 type="email"
-                                className="form-control"
+                                class="form-control"
                                 placeholder="Email"
                                 v-model="email"
                             />
-                            <div className="input-group-append">
-                                <div className="input-group-text">
-                                    <span className="fa fa-envelope"></span>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fa fa-envelope"></span>
                                 </div>
                             </div>
                         </div>
-                        <div className="input-group mb-3">
+                        <div class="input-group mb-3">
                             <input
                                 type="password"
-                                className="form-control"
+                                class="form-control"
                                 placeholder="Password"
                                 v-model="password"
                             />
-                            <div className="input-group-append">
-                                <div className="input-group-text">
-                                    <span className="fa fa-lock"></span>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fa fa-lock"></span>
                                 </div>
                             </div>
                         </div>
-                        <div className="input-group mb-3">
+                        <div class="input-group mb-3">
                             <input
                                 type="password"
-                                className="form-control"
+                                class="form-control"
                                 placeholder="Retype password"
                                 v-model="c_password"
                             />
-                            <div className="input-group-append">
-                                <div className="input-group-text">
-                                    <span className="fa fa-lock"></span>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fa fa-lock"></span>
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-8">
-                                <div className="icheck-primary">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="icheck-primary">
                                     <input
                                         type="checkbox"
                                         id="agreeTerms"
@@ -75,17 +75,17 @@
                                 </div>
                             </div>
 
-                            <div className="col-4">
+                            <div class="col-4">
                                 <button
                                     type="submit"
-                                    className="btn btn-primary btn-block"
+                                    class="btn btn-primary btn-block"
                                 >
                                     Register
                                 </button>
                             </div>
                         </div>
                     </form>
-                    <router-link to="/login" className="text-center"
+                    <router-link to="/login" class="text-center"
                         >Sign in here if you already have account</router-link
                     >
                 </div>

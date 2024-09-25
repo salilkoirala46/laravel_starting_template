@@ -1,64 +1,62 @@
 <template>
     <div class="login-page">
-        <div className="login-box">
-            <div className="login-logo">
+        <div class="login-box">
+            <div class="login-logo">
                 <router-link to="/login"><b>Car</b>SALES</router-link>
             </div>
 
-            <div className="card">
-                <div className="card-body login-card-body">
-                    <p className="login-box-msg">
-                        Sign in to start your session
-                    </p>
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg">Sign in to start your session</p>
                     <form @submit.prevent="login" method="post">
-                        <div className="input-group mb-3">
+                        <div class="input-group mb-3">
                             <input
                                 type="email"
-                                className="form-control"
+                                class="form-control"
                                 placeholder="Email"
                                 v-model="email"
                             />
-                            <div className="input-group-append">
-                                <div className="input-group-text">
-                                    <span className="fa fa-envelope"></span>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fa fa-envelope"></span>
                                 </div>
                             </div>
                         </div>
-                        <div className="input-group mb-3">
+                        <div class="input-group mb-3">
                             <input
                                 type="password"
-                                className="form-control"
+                                class="form-control"
                                 placeholder="Password"
                                 v-model="password"
                             />
-                            <div className="input-group-append">
-                                <div className="input-group-text">
-                                    <span className="fa fa-lock"></span>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fa fa-lock"></span>
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-8">
-                                <div className="icheck-primary">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="icheck-primary">
                                     <input type="checkbox" id="remember" />
                                     <label for="remember"> Remember Me </label>
                                 </div>
                             </div>
 
-                            <div className="col-4">
+                            <div class="col-4">
                                 <button
                                     type="submit"
-                                    className="btn btn-primary btn-block"
+                                    class="btn btn-primary btn-block"
                                 >
                                     Sign In
                                 </button>
                             </div>
                         </div>
                     </form>
-                    <p className="mb-0">
+                    <p class="mb-0">
                         <router-link
                             to="/register"
-                            className="text-center router-link"
+                            class="text-center router-link"
                             >Click here to register</router-link
                         >
                     </p>
