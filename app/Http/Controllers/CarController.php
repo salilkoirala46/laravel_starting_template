@@ -32,7 +32,8 @@ class CarController extends Controller
             "year" => 'required',
             "fuel-type" => 'required',
             "body-type" => 'required',
-            "variant-t" => 'required'
+            "variant-t" => 'required',
+            "imagePath" => 'required'
         ]);
 
         $car = Car::create($fields);
@@ -60,7 +61,8 @@ class CarController extends Controller
             "year" => 'required',
             "fuel-type" => 'required',
             "body-type" => 'required',
-            "variant-t" => 'required'
+            "variant-t" => 'required',
+            "imagePath" => 'required'
         ]);
 
         $car -> update($fields);

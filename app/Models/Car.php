@@ -16,6 +16,7 @@ class Car extends Model
         "year",
         "fuel-type",
         "body-type",
-        "variant-t"
+        "variant-t",
+        "imagePath"
     ];
 }

@@ -100,6 +100,7 @@
         </div>
     </aside>
     <!-- /.control-sidebar -->
+    <Footer />
 </template>
 
 <script></script>
