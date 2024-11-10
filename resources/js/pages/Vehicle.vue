@@ -42,87 +42,60 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">#</th>
-                                            <th>Task</th>
-                                            <th>Progress</th>
-                                            <th style="width: 40px">Label</th>
+                                            <th>Type</th>
+                                            <th>Model</th>
+                                            <th>Year</th>
+                                            <th>Fuel Type</th>
+                                            <th>Body Type</th>
+                                            <th>Variant Type</th>
+                                            <th>make</th>
+                                            <th style="width: 40px">Image</th>
+                                            <th style="width: 40px">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1.</td>
-                                            <td>Update software</td>
+                                    <!-- Execute this body if there is item -->
+                                    <tbody v-if="cars.length > 0">
+                                        <tr
+                                            v-for="(car, key) in cars"
+                                            :key="key"
+                                        >
+                                            <td>{{ car.id }}</td>
+                                            <td>{{ car.type }}</td>
+                                            <td>{{ car.model }}</td>
+                                            <td>{{ car.year }}</td>
+                                            <td>{{ car["fuel-type"] }}</td>
+                                            <td>{{ car["body-type"] }}</td>
+                                            <td>{{ car["variant-t"] }}</td>
+                                            <td>{{ car.make }}</td>
                                             <td>
-                                                <div
-                                                    class="progress progress-xs"
-                                                >
-                                                    <div
-                                                        class="progress-bar progress-bar-danger"
-                                                        style="width: 55%"
-                                                    ></div>
-                                                </div>
+                                                <img
+                                                    v-if="car.imagePath != ''"
+                                                    :src="
+                                                        '/storage/' +
+                                                        car.imagePath
+                                                    "
+                                                    alt="Car Image"
+                                                    width="100"
+                                                    height="100"
+                                                />
                                             </td>
                                             <td>
-                                                <span class="badge bg-danger"
-                                                    >55%</span
+                                                <router-link
+                                                    to="/"
+                                                    class="fas fa-edit buttonSpacing editButton"
+                                                ></router-link>
+                                                <router-link
+                                                    to="/"
+                                                    class="fas fa-trash deleteButton"
                                                 >
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2.</td>
-                                            <td>Clean database</td>
-                                            <td>
-                                                <div
-                                                    class="progress progress-xs"
-                                                >
-                                                    <div
-                                                        class="progress-bar bg-warning"
-                                                        style="width: 70%"
-                                                    ></div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-warning"
-                                                    >70%</span
-                                                >
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3.</td>
-                                            <td>Cron job running</td>
-                                            <td>
-                                                <div
-                                                    class="progress progress-xs progress-striped active"
-                                                >
-                                                    <div
-                                                        class="progress-bar bg-primary"
-                                                        style="width: 30%"
-                                                    ></div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primary"
-                                                    >30%</span
-                                                >
+                                                </router-link>
                                             </td>
                                         </tr>
+                                    </tbody>
+                                    <!-- Execute this body if no item -->
+                                    <tbody v-if="cars.length <= 0">
                                         <tr>
-                                            <td>4.</td>
-                                            <td>Fix and squish bugs</td>
-                                            <td>
-                                                <div
-                                                    class="progress progress-xs progress-striped active"
-                                                >
-                                                    <div
-                                                        class="progress-bar bg-success"
-                                                        style="width: 90%"
-                                                    ></div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-success"
-                                                    >90%</span
-                                                >
-                                            </td>
+                                            <td colspan="5">No items found</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -164,9 +137,31 @@
 
 <script>
 export default {
+    data() {
+        return {
+            cars: [],
+        };
+    },
+    mounted() {
+        this.getCars();
+    },
     methods: {
         addCar() {
             this.$router.push({ name: "vehicles.add" });
+        },
+        async getCars() {
+            await this.$axios
+                .get("cars")
+                .then((response) => {
+                    console.log(response.data);
+                    console.log(response.data.map((car) => car["variant-t"]));
+                    this.cars = response.data;
+                    // this.cars = [];
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.cars = [];
+                });
         },
     },
 };
@@ -175,5 +170,15 @@ export default {
 <style>
 .addcar {
     max-width: 200px;
+}
+
+.buttonSpacing {
+    padding-right: 5px;
+}
+.editButton {
+    color: #28a745;
+}
+.deleteButton {
+    color: #dc3545;
 }
 </style>

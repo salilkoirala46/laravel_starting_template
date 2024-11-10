@@ -26,7 +26,7 @@ export default defineConfig({
         // Use `server` instead of `devServer`
         proxy: {
             "/api": {
-                target: "http://localhost",
+                target: "http://localhost:8000",
                 changeOrigin: true,
                 secure: false,
             },

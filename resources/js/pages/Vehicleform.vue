@@ -24,6 +24,16 @@
 
         <!-- Main content -->
         <section class="content">
+            <!-- Display success message -->
+            <!-- <div v-if="successMessage" class="alert alert-success" role="alert">
+                {{ successMessage }}
+            </div> -->
+
+            <div v-if="showPopup" class="popup-overlay">
+                <div class="popup-content">
+                    <p>{{ successMessage }}</p>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary">
@@ -169,14 +179,18 @@
                                                 <div class="custom-file">
                                                     <input
                                                         type="file"
-                                                        v-on="form.image"
-                                                        class="custom-file-input"
+                                                        v-on:change="
+                                                            onFileChange
+                                                        "
                                                         id="exampleInputFile"
                                                     />
                                                     <label
                                                         class="custom-file-label"
                                                         for="exampleInputFile"
-                                                        >Choose file</label
+                                                        >{{
+                                                            fileName ||
+                                                            "Choose file"
+                                                        }}</label
                                                     >
                                                 </div>
                                             </div>
@@ -215,7 +229,6 @@ export default {
     data() {
         return {
             form: {
-                id: "",
                 type: "",
                 make: "",
                 model: "",
@@ -225,11 +238,67 @@ export default {
                 variantT: "",
                 image: "",
             },
+            fileName: "",
+            successMessage: "",
+            showPopup: false,
+            formData: "",
         };
     },
     methods: {
-        handleSave() {
+        onFileChange(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                this.form.image = file;
+                this.fileName = file.name; // Update file name for label
+            }
+        },
+        async handleSave() {
             console.log(this.form);
+
+            this.formData = new FormData();
+
+            for (const key in this.form) {
+                this.formData.append(key, this.form[key]);
+            }
+
+            try {
+                // Send request with FormData
+                const response = await this.$axios.post(
+                    "/cars",
+                    this.formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                );
+                console.log("File uploaded successfully", response.data);
+                // this.successMessage = "File uploaded successfully";
+                this.showPopup = true;
+
+                setTimeout(() => {
+                    this.showPopup = false;
+                    this.$router.push({ name: "vehicles" });
+                }, 3000);
+                // this.resetForm();
+            } catch (error) {
+                console.error("Failed to submit data:", error);
+                this.successMessage = "";
+            }
+        },
+        resetForm() {
+            this.formData = new FormData();
+            this.form = {
+                type: "",
+                make: "",
+                model: "",
+                year: "",
+                fuelType: "",
+                bodyType: "",
+                variantT: "",
+                image: "",
+            };
         },
     },
 };

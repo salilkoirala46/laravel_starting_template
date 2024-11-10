@@ -2,6 +2,7 @@ import "bootstrap";
 import "/resources/js/adminlte/jquery.js";
 import "/resources/js/adminlte/bootstrap.js";
 import "/resources/js/adminlte/adminlte.js";
+import "/resources/js/adminlte/bs-custom-file-input.min.js";
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the

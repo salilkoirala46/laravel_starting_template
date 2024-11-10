@@ -25,6 +25,13 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
+        //this is to rename request parameter to fuelType
+        $request->merge([
+            'fuel-type' => $request->input('fuelType'),
+            'body-type' => $request->input('bodyType'),
+            'variant-t' => $request->input('variantT'),
+        ]);
+
         $fields = $request -> validate([
             "type" => 'required',
             "make" => 'required', 
@@ -33,12 +40,21 @@ class CarController extends Controller
             "fuel-type" => 'required',
             "body-type" => 'required',
             "variant-t" => 'required',
-            "imagePath" => 'required'
+            "image" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            
+            // Retrieve the uploaded image file
+            $file = $request->file('image');
+            $filePath = $file->store('images', 'public'); // Stored in `storage/app/public/images`
+            $fields['imagePath'] = $filePath;
+
+        }
 
         $car = Car::create($fields);
         
-        return $car; 
+        return response()->json($car, 201);
     }
 
     /**
