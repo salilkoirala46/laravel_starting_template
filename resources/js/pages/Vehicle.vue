@@ -81,14 +81,22 @@
                                             </td>
                                             <td>
                                                 <router-link
-                                                    to="/"
-                                                    class="fas fa-edit buttonSpacing editButton"
+                                                    :to="{
+                                                        name: 'vehicles.edit',
+                                                        params: { id: car.id },
+                                                    }"
+                                                    class="buttonSpacing editButton"
+                                                    ><i class="fas fa-edit"></i
                                                 ></router-link>
-                                                <router-link
-                                                    to="/"
-                                                    class="fas fa-trash deleteButton"
+                                                <button
+                                                    @click="
+                                                        deleteCarById(car.id)
+                                                    "
+                                                    type="button"
+                                                    class="deleteButton"
                                                 >
-                                                </router-link>
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -101,23 +109,36 @@
                                 </table>
                             </div>
                             <!-- /.card-body -->
-                            <div class="card-footer clearfix">
+                            <div
+                                class="card-footer clearfix"
+                                v-if="totalRecords > 0"
+                            >
                                 <ul
                                     class="pagination pagination-sm m-0 float-right"
                                 >
-                                    <li class="page-item">
+                                    <li
+                                        class="page-item"
+                                        v-if="currentPage > 1"
+                                        @click="changePage(currentPage - 1)"
+                                    >
                                         <a class="page-link" href="#">«</a>
                                     </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">1</a>
+                                    <li
+                                        class="page-item"
+                                        v-for="page in totalPage"
+                                        key="page"
+                                    >
+                                        <a
+                                            class="page-link"
+                                            @click="changePage(page)"
+                                            >{{ page }}</a
+                                        >
                                     </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
+                                    <li
+                                        class="page-item"
+                                        v-if="currentPage < totalPage"
+                                        @click="changePage(currentPage + 1)"
+                                    >
                                         <a class="page-link" href="#">»</a>
                                     </li>
                                 </ul>
@@ -140,6 +161,11 @@ export default {
     data() {
         return {
             cars: [],
+            page: 1,
+            per_page: 15,
+            totalRecords: 0, // this is needed to hide and unhide pagination if there are no records
+            currentPage: 0, //this  is needed to create previous and next button
+            totalPage: 0, //this is needed to create number of hyperlinks in pagees
         };
     },
     mounted() {
@@ -149,13 +175,37 @@ export default {
         addCar() {
             this.$router.push({ name: "vehicles.add" });
         },
+        changePage(page) {
+            this.page = page;
+            this.getCars();
+            console.log(page);
+        },
+        async deleteCarById(id) {
+            console.log("delete this car with id :" + id);
+            await this.$axios
+                .delete("/cars/" + id)
+                .then((response) => {
+                    console.log("Car deleted successfully");
+                    this.getCars();
+                })
+                .catch((error) => {
+                    console.error("Failed to delete record", error);
+                });
+        },
         async getCars() {
             await this.$axios
-                .get("cars")
+                .get("cars", {
+                    params: {
+                        page: this.page,
+                        per_page: this.per_page,
+                    },
+                })
                 .then((response) => {
-                    console.log(response.data);
-                    console.log(response.data.map((car) => car["variant-t"]));
-                    this.cars = response.data;
+                    this.cars = response.data.data;
+                    this.totalRecords = response.data.total;
+                    this.currentPage = response.data.current_page;
+                    this.totalPage = response.data.last_page;
+                    console.log(response);
                     // this.cars = [];
                 })
                 .catch((error) => {

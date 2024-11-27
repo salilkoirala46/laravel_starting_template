@@ -37,7 +37,7 @@
                     data-accordion="false"
                 >
                     <li class="nav-item">
-                        <router-link to="vehicles" class="nav-link">
+                        <router-link to="/vehicles" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>Vehicles</p>
                         </router-link>

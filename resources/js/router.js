@@ -38,6 +38,12 @@ const routes = [
         meta: { requiresAuth: true }, // Private route
     },
     {
+        path: "/vehicles/:id/edit",
+        name: "vehicles.edit",
+        component: () => import("./pages/Editform.vue"),
+        meta: { requiresAuth: true }, // Private route
+    },
+    {
         path: "/:pathMatch(.*)*",
         name: "notFound",
         component: () => import("./pages/Notfound.vue"),

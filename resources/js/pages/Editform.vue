@@ -7,14 +7,14 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Add Vehicle</h1>
+                        <h1>Edit Vehicle</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
                                 <a href="#">Home</a>
                             </li>
-                            <li class="breadcrumb-item active">Add Vehicle</li>
+                            <li class="breadcrumb-item active">Edit Vehicle</li>
                         </ol>
                     </div>
                 </div>
@@ -194,6 +194,17 @@
                                                     >
                                                 </div>
                                             </div>
+                                            <!-- Image preview -->
+                                            <div
+                                                v-if="imagePreview"
+                                                class="image-preview mt-3"
+                                            >
+                                                <img
+                                                    :src="imagePreview"
+                                                    alt="Image Preview"
+                                                    width="200"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -242,35 +253,73 @@ export default {
             successMessage: "",
             showPopup: false,
             formData: "",
+            imagePreview: null,
         };
     },
+    mounted() {
+        this.getCarData();
+    },
     methods: {
+        async getCarData() {
+            await this.$axios
+                .get(`cars/${this.$route.params.id}`)
+                .then((response) => {
+                    this.form.type = response.data.type;
+                    this.form.make = response.data.make;
+                    this.form.model = response.data.model;
+                    this.form.year = response.data.year;
+                    this.form.fuelType = response.data["fuel-type"];
+                    this.form.bodyType = response.data["body-type"];
+                    this.form.variantT = response.data["variant-t"];
+                    this.imagePreview = response.data.imagePath
+                        ? "/storage/" + response.data.imagePath
+                        : "";
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
         onFileChange(event) {
             const file = event.target.files[0];
-
             if (file) {
                 this.form.image = file;
-                this.fileName = file.name; // Update file name for label
+                console.log(this.form.image);
+                this.fileName = file.name; // Store the file name (if needed)
+                this.imagePreview = URL.createObjectURL(file); // Generate a preview URL
+            } else {
+                this.fileName = "";
+                this.form.image = "";
+                this.imagePreview = null;
             }
         },
         async handleSave() {
-            this.formData = new FormData();
+            const { image, ...formFields } = this.form;
 
-            for (const key in this.form) {
-                this.formData.append(key, this.form[key]);
-            }
+            // Send request with FormData
             try {
-                // Send request with FormData
-                const response = await this.$axios.post(
-                    "/cars",
-                    this.formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
+                await this.$axios.put(
+                    `/cars/${this.$route.params.id}`,
+                    formFields
                 );
-                this.successMessage = "File uploaded successfully";
+
+                if (image) {
+                    const formData = new FormData();
+                    formData.append("image", image);
+
+                    // Send the image as a separate request
+                    await this.$axios.post(
+                        `/cars/${this.$route.params.id}/upload-image`,
+                        formData,
+                        {
+                            headers: {
+                                "Content-Type": "multipart/form-data",
+                            },
+                        }
+                    );
+                }
+
+                // Show success message
+                this.successMessage = "Car updated successfully!";
                 this.showPopup = true;
 
                 setTimeout(() => {
@@ -278,10 +327,17 @@ export default {
                     this.$router.push({ name: "vehicles" });
                 }, 3000);
             } catch (error) {
-                console.error("Failed to submit data:", error);
+                console.error("Failed to update car:", error);
                 this.successMessage = "";
             }
         },
     },
 };
 </script>
+<style scoped>
+.image-preview img {
+    border-radius: 5px;
+    max-width: 100%;
+    height: auto;
+}
+</style>
