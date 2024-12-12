@@ -23,25 +23,30 @@ const routes = [
         path: "/dashboard",
         name: "dashboard",
         component: () => import("./pages/Dashboard.vue"),
+        redirect: { name: "vehicles" }, //default route
         meta: { requiresAuth: true }, // Private route
-    },
-    {
-        path: "/vehicles",
-        name: "vehicles",
-        component: () => import("./pages/Vehicle.vue"),
-        meta: { requiresAuth: true }, // Private route
-    },
-    {
-        path: "/vehicles/add",
-        name: "vehicles.add",
-        component: () => import("./pages/Vehicleform.vue"),
-        meta: { requiresAuth: true }, // Private route
-    },
-    {
-        path: "/vehicles/:id/edit",
-        name: "vehicles.edit",
-        component: () => import("./pages/Editform.vue"),
-        meta: { requiresAuth: true }, // Private route
+        children: [
+            {
+                path: "vehicles",
+                name: "vehicles",
+                component: () => import("./pages/Vehicle.vue"),
+            },
+            {
+                path: "vehicles/add",
+                name: "vehicles.add",
+                component: () => import("./pages/Vehicleform.vue"),
+            },
+            {
+                path: "vehicles/:id/edit",
+                name: "vehicles.edit",
+                component: () => import("./pages/Editform.vue"),
+            },
+            {
+                path: "user",
+                name: "user",
+                component: () => import("./pages/User.vue"),
+            },
+        ],
     },
     {
         path: "/:pathMatch(.*)*",

@@ -1,6 +1,4 @@
 <template>
-    <Navbar />
-    <Sidebar />
     <div class="content-wrapper" style="min-height: 1604.8px">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -231,8 +229,6 @@
         </section>
         <!-- /.content -->
     </div>
-
-    <Footer />
 </template>
 
 <script>
@@ -318,15 +314,19 @@ export default {
                     );
                 }
 
-                // Show success message
-                this.successMessage = "Car updated successfully!";
-                this.showPopup = true;
-
-                setTimeout(() => {
-                    this.showPopup = false;
+                this.$swal({
+                    icon: "success",
+                    title: "success",
+                    text: "Vehicle added successfully",
+                }).then(() => {
                     this.$router.push({ name: "vehicles" });
-                }, 3000);
+                });
             } catch (error) {
+                this.$swal({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
                 console.error("Failed to update car:", error);
                 this.successMessage = "";
             }

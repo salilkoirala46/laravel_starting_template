@@ -37,7 +37,13 @@
                     data-accordion="false"
                 >
                     <li class="nav-item">
-                        <router-link to="/vehicles" class="nav-link">
+                        <router-link to="/dashboard/user" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>Users</p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link to="/dashboard/vehicles" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>Vehicles</p>
                         </router-link>

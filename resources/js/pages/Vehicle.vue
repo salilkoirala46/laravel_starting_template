@@ -1,8 +1,6 @@
 <template>
-    <Navbar />
-    <Sidebar />
-    <div class="content-wrapper" style="min-height: 1302.4px">
-        <!-- Content Header (Page header) -->
+    <div class="content-wrapper">
+        <!-- Content Header -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
@@ -19,10 +17,9 @@
                     </div>
                 </div>
             </div>
-            <!-- /.container-fluid -->
         </section>
 
-        <!-- Main content -->
+        <!-- Main Content -->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -31,35 +28,36 @@
                             <div class="card-header">
                                 <button
                                     @click="addCar"
-                                    class="btn btn-info btn-sm addcar"
+                                    class="btn btn-info btn-sm"
                                 >
                                     Add Vehicle
                                 </button>
                             </div>
-                            <!-- /.card-header -->
+
                             <div class="card-body">
-                                <table class="table table-bordered">
-                                    <thead>
+                                <table
+                                    class="table table-bordered table-hover table-striped"
+                                >
+                                    <thead class="thead-dark">
                                         <tr>
-                                            <th style="width: 10px">#</th>
+                                            <th>#</th>
                                             <th>Type</th>
                                             <th>Model</th>
                                             <th>Year</th>
                                             <th>Fuel Type</th>
                                             <th>Body Type</th>
-                                            <th>Variant Type</th>
-                                            <th>make</th>
-                                            <th style="width: 40px">Image</th>
-                                            <th style="width: 40px">Actions</th>
+                                            <th>Variant</th>
+                                            <th>Make</th>
+                                            <th>Image</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <!-- Execute this body if there is item -->
                                     <tbody v-if="cars.length > 0">
                                         <tr
-                                            v-for="(car, key) in cars"
-                                            :key="key"
+                                            v-for="(car, index) in cars"
+                                            :key="car.id"
                                         >
-                                            <td>{{ car.id }}</td>
+                                            <td>{{ index + 1 }}</td>
                                             <td>{{ car.type }}</td>
                                             <td>{{ car.model }}</td>
                                             <td>{{ car.year }}</td>
@@ -67,51 +65,52 @@
                                             <td>{{ car["body-type"] }}</td>
                                             <td>{{ car["variant-t"] }}</td>
                                             <td>{{ car.make }}</td>
-                                            <td>
+                                            <td class="text-center">
                                                 <img
-                                                    v-if="car.imagePath != ''"
-                                                    :src="
-                                                        '/storage/' +
-                                                        car.imagePath
-                                                    "
+                                                    v-if="car.imagePath"
+                                                    :src="`/storage/${car.imagePath}`"
                                                     alt="Car Image"
-                                                    width="100"
-                                                    height="100"
+                                                    class="car-image"
                                                 />
+                                                <span v-else>No Image</span>
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <router-link
                                                     :to="{
                                                         name: 'vehicles.edit',
                                                         params: { id: car.id },
                                                     }"
-                                                    class="buttonSpacing editButton"
-                                                    ><i class="fas fa-edit"></i
-                                                ></router-link>
+                                                    class="btn btn-sm btn-primary"
+                                                >
+                                                    <i class="fas fa-edit"></i>
+                                                </router-link>
                                                 <button
                                                     @click="
                                                         deleteCarById(car.id)
                                                     "
-                                                    type="button"
-                                                    class="deleteButton"
+                                                    class="btn btn-sm btn-danger"
                                                 >
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <!-- Execute this body if no item -->
-                                    <tbody v-if="cars.length <= 0">
+                                    <tbody v-else>
                                         <tr>
-                                            <td colspan="5">No items found</td>
+                                            <td
+                                                colspan="10"
+                                                class="text-center"
+                                            >
+                                                No vehicles found
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- /.card-body -->
+
                             <div
-                                class="card-footer clearfix"
                                 v-if="totalRecords > 0"
+                                class="card-footer clearfix"
                             >
                                 <ul
                                     class="pagination pagination-sm m-0 float-right"
@@ -126,7 +125,10 @@
                                     <li
                                         class="page-item"
                                         v-for="page in totalPage"
-                                        key="page"
+                                        :key="page"
+                                        :class="{
+                                            active: page === currentPage,
+                                        }"
                                     >
                                         <a
                                             class="page-link"
@@ -144,16 +146,11 @@
                                 </ul>
                             </div>
                         </div>
-                        <!-- /.card -->
                     </div>
-                    <!-- /.col -->
                 </div>
             </div>
-            <!-- /.container-fluid -->
         </section>
-        <!-- /.content -->
     </div>
-    <Footer />
 </template>
 
 <script>
@@ -181,16 +178,33 @@ export default {
             console.log(page);
         },
         async deleteCarById(id) {
-            console.log("delete this car with id :" + id);
-            await this.$axios
-                .delete("/cars/" + id)
-                .then((response) => {
-                    console.log("Car deleted successfully");
-                    this.getCars();
-                })
-                .catch((error) => {
-                    console.error("Failed to delete record", error);
-                });
+            const result = await this.$swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            });
+
+            if (result.isConfirmed) {
+                console.log("delete this car with id :" + id);
+                await this.$axios
+                    .delete("/cars/" + id)
+                    .then((response) => {
+                        this.$swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success",
+                        });
+
+                        this.getCars();
+                    })
+                    .catch((error) => {
+                        console.error("Failed to delete record", error);
+                    });
+            }
         },
         async getCars() {
             await this.$axios
@@ -206,7 +220,6 @@ export default {
                     this.currentPage = response.data.current_page;
                     this.totalPage = response.data.last_page;
                     console.log(response);
-                    // this.cars = [];
                 })
                 .catch((error) => {
                     console.log(error);
@@ -218,17 +231,29 @@ export default {
 </script>
 
 <style>
-.addcar {
-    max-width: 200px;
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
 }
 
-.buttonSpacing {
-    padding-right: 5px;
+.table-hover tbody tr:hover {
+    background-color: #f2f2f2;
 }
-.editButton {
-    color: #28a745;
+
+.car-image {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
 }
-.deleteButton {
-    color: #dc3545;
+
+thead.thead-dark th {
+    background-color: #343a40;
+    color: white;
+}
+
+.btn-sm {
+    margin: 0 2px;
 }
 </style>

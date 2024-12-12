@@ -3,6 +3,8 @@ import router from "./router";
 import axios from "@/axios";
 import { createApp } from "vue";
 import App from "./App.vue";
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css"; // Optional for default styles
 
 const app = createApp(App);
 
@@ -35,4 +37,6 @@ if (storedUserData) {
     app.config.globalProperties.$user.setUser(JSON.parse(storedUserData));
 }
 
-app.use(router).mount("#app");
+app.use(router);
+app.use(VueSweetalert2);
+app.mount("#app");
